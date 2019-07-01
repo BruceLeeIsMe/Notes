@@ -40,7 +40,11 @@
 
    本地仓库回退到上一个版本，切清除工作区内容。
 
-   疑问？是清除的版本差异的工作区内容？还是我修改了代码未提交的工作区内容？还是两者一起清楚？
+## **疑问？**
+
+是清除的版本差异的工作区内容？还是我修改了代码未提交的工作区内容？还是两者一起清楚？
+
+是清除的版本差异的工作区内容？还是我修改了代码未提交的工作区内容？还是两者一起清楚？
 
 # merge request
 
@@ -60,3 +64,38 @@
 
 4. merge request  流程完成
 
+# ignore与取消跟踪
+
+## 取消跟踪文件
+
+**git rm  filename -r --cached**
+
+​		使用git rm -r --cached filename命令后，该文件会以delete状态存储在暂存区，
+
+## **疑问?**
+
+可不可以做到我一个人取消跟踪某个文件，而不影响到其他人。
+
+答;不可以，git本身就是分布式版本管理，每一个人的版本应该都是应该保持最新（相同）的。
+
+
+
+**达到单独取消跟踪的尝试：**
+
+实验：
+
+1. git rm -r --cached file3.md，并且不提交到远程
+2. 远程修改 file3.md
+3. 本地pull代码
+
+结果：
+
+error: Your local changes to the following files would be overwritten by merge:
+        file3.md
+Please commit your changes or stash them before you merge.
+Aborting
+Updating 811c7f8..7e73467
+
+**git在合并之前，必须先提交暂存区的内容，否则无法合并**
+
+**结论：此方法不可行**
