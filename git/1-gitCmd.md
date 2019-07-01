@@ -101,62 +101,10 @@ $ git commit -v
 
 
 
-# 代码提交规范
-
-**参考文章：**
-
-作者：[**Pines_Cheng**](https://segmentfault.com/u/pines_cheng)
-
-文章：[git commit 规范指南](https://segmentfault.com/a/1190000009048911)
-
-**Commit message 包括三个部分：header，body 和 footer。**
-
-header必须有，body与footer可以省略。
-
-**header部分信息应该言简意赅。避免跨行影响美观**
-
-header包含3个部分：：`type`（必需）、`scope`（可选）和`subject`（必需）。
-
-1》 type（本次提交类型）
-
-- feat：新功能（feature）
-
-- fix：修补bug
-
-- docs：文档（documentation）
-
-- style： 格式（不影响代码运行的变动）
-
-- refactor：重构（即不是新增功能，也不是修改bug的代码变动）
-
-- test：增加测试
-
-- chore：构建过程或辅助工具的变动
-
-  
-
-2》 location （此次提交影响范围）
-
-scope用于说明 commit 影响的范围，比如数据层、控制层、视图层等等，视项目不同而不同。
-
-
-
-3》subject （对此次提交的简短描述）
-
-
-
-举例： feat(controller):add login function
-
-
-
-**其他注意事项：**
-
-- 以动词开头，使用第一人称现在时，比如change，而不是changed或changes
-- 第一个字母小写
-- 结尾不加句号（.）
-
 
 
 
 
 # 后悔药相关
+
+# 分支操作
