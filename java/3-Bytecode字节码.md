@@ -1,57 +1,34 @@
-# Java中的数据类型
+# 初步了解：
 
-## 基本数据类型
+mark一下，以后再深入学习，
 
-又名：原生类型、内置类型。
+强化一下，JVM知识。
 
-1. 整型 **byte** **short**(2 byte) **int**(4 byte) **long**(8 byte)
-2. 浮点型 **float**(4 byte) **double**(8 byte)
-3. 字符型 **char**(2 byte) Java使用Unicode编码，可以存储汉字
-4. 布尔型 **boolean**(1 byte) 理论占1 bit 实际占用1 byte
+![avap](H:\GitRepository\Notes\java\img\javap.png)
 
+解释：
 
-
-默认类型：
-
-​	int为整型的默认类型
-
-​	double为浮点型的默认类型
+flags：方法修饰符标志
 
 
 
-如何输入基本数据类型：
+stack=2，操作数栈深度为2。深度由编译器时确定。
 
-整型：
+locals=2，本地变量表长度为2，索引从0开始！长度编译器决定，		包含方法参数，以及方法内局部变量。
 
-```java
-	byte b=12;
-	short s=12;
-	long l=12L;
-```
-浮点型：
-
-		float f=1.0f;
-		double d=1.0d;
-基本数据类型转换：
+args_size，方法参数大小
 
 
 
-**注意：**
+命令解释：
 
-​	byte、short在数学运算的时候，会自动转化为int类型进行计算。
+iconst_1: intContstant 1:定义int类型的常量1放入操作数栈中。
 
-**典例：**
+istore_1:将栈顶的int类型的数据存入 到 索引为1的局部变量表中。
 
-byte b=1;
+iload_1: 将局部变量表中索引为1的int型数据加载到栈顶。
 
-b=b+1;//编译不通过，需要强制类型转换
+iadd: 将操作数栈中的两个int型元素依次弹出，再进行加法，最后		   将结果推入栈中。
 
-b+=1;//编译通过
+i2b: int to byte: int类型转byte类型
 
-
-
-## 引用数据类型
-
-1. 类
-2. 接口
-3. 数组
