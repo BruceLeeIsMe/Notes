@@ -166,10 +166,111 @@ i++;//++i;
 
 1. 父类型转子类型
 2. 子类型转父类型
+3. 
 
-类型转换之后，引用与实例字段，静态字段方法，之间的关系
+**个人理解总结：**
+
+是否能强制转换成功，主要取决于此时堆中的实例对象是父类还是子类，而与引用类型无关。
+
+堆中的是子对象则其引用可以随意向上转型为父对象引用，如果为父类型对象，则无法转为子类型引用。
+
+```java
+Fu f=(Fu)new Zi();	// 引用 向上转型成功
+Zi z=(Zi)f;			// 引用 向下转型成功
+```
+
+```java
+Fu f=new Fu();
+Zi f=(Zi) f;	// 引用 向下转型失败，因为f引用指向的是父类实例对象，引用无法向下转型。
+```
+
+**复习继承相关知识：**
+
+1. 父类实例变量会随继承到子类，如果子父类变量重名，那么父类变量被隐藏。
+2. 父类实例方法会随继承到子类，如果子父类方法重名，那么父类方法被重写(overide)。
+3. 静态方法以及静态字段，这是属于类的元素，不会在extends与implements中遗传到子类。
 
 
 
+```java
+class Fu{
+	public static int staticVar=1;
+	int instVar=2;
+	public void showName(){
+		System.out.println("this is Fu");		
+	}
+}
+class Zi extends Fu{
+	public static int staticVar=2;
+	int instVar=1;
+	public void showName(){
+		System.out.println("this is Zi");
+	}
+    public void ziFun(){
+        System.out.println("this is 子类 fun");
+    }
+    
+    public static void main(String args[]){
+        Fu f=(Fu)new Zi();	// 向上转型
+        Zi z=(Zi)f;			// 向下转型
+        /* 静态方法与字段 start */
+        
+        System.out.println(f.staticVar);// 为f引用所属类的静态字段，即1
+        System.out.println(z.staticVar);// 为z引用所属类的静态字段，即2
+        // ali编码规范中，说到不要用引用去访问静态字段，无端增加编译器负担，此处学习需要。
+        
+        /* 静态方法与字段 end */
+        
+        /*------------分割线---------------*/
+        
+        /* 实例变量以及方法 start */
+        
+        System.out.println(f.instVar);
+        System.out.println(z.instVar);
+        // 引用f,z 都是指向运行时堆中的同一个对象，所以两次输出都为上面实例化的Zi类的实例变量。
+        // 当然执行的方法也是对应其实例化对象的方法
+        
+        // 父类引用调用 子类特有方法，编译失败
+        f.ziFun();// 因为在编译时间，编译器通过符号引用f，只能找到符号引用f（ 即Fu）的方
+        		  // 法，父类引用没有子类方法，所以报错
+        
+        /* 实例变量以及方法 end */
+    }
+}
 
+```
+
+
+
+# OOP特性
+
+**object oriented programming：**
+
+
+
+**四大特性：**
+
+
+
+## 抽象
+
+## 封装
+
+## 继承
+
+**java继承与实现：**
+
+extends继承：
+
+implements实现：
+
+## 多态
+
+1. 重写
+2. 重载
+3. 动态绑定
+
+
+
+# 关键字：
 
