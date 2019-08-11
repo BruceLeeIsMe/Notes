@@ -112,7 +112,7 @@ class Ming{
 ## 垃圾收集器
 根据不同区域采用不同特点的收集器
 
-    
+​    
 
 
 
@@ -152,7 +152,8 @@ mark一下，以后再深入学习，
                        fileds_info表结构：
                        附fileds_info表详细数据结构。
                        
-#         class文件结构
+
+## class文件结构
 
 class文件本质上就是一张表，表中包含无符号数和其他表，其他表又包含副无符号数与表。
 
@@ -178,13 +179,13 @@ class文件本质上就是一张表，表中包含无符号数和其他表，其
 * 直接父类
 
 * 直接父接口表
-   
+  
 * 字段表集合
 
 * 方法表集合
 
 * 属性表集合（部分属性是字段和方法的附加属性，比如：Code和ConstantValve）
-   
+  
 
 ![javap](.\img\javap.png)
 
@@ -203,8 +204,10 @@ class文件本质上就是一张表，表中包含无符号数和其他表，其
 * 异常处理指令
 * 同步指令
 
+# 虚拟机字节码执行引擎
 
-# Code属性：
+## Code属性：
+
 解释：
 
 flags：方法修饰符标志
@@ -233,15 +236,347 @@ i2b: int to byte: int类型转byte类型
 
 
 
+# 类加载
+
+类加载是将class字节码数据读取到虚拟机在方法区生成class对象的过程。
+
+## 何时触发类加载
+
+## 类加载过程
+
+主要分为三个阶段，这三个阶段是交叉执行的，没有严格的执行顺序。
+
+* 加载
+  1)通过类的全限定名获取class字节流将其加载到内存中（来源没有规定，可从多个途径获取class字节流，如.class文件，jar包，网络-ejb？dubbo？，数据库，计算生成-动态代理）
+  2)将class文件的静态存储结构转化为方法区的运行时数据结构（这个结构具体是啥样没有规定，不同虚拟机有不同实现）
+  3)生成class对象，作为程序代码访问方法区数据的接口。（所以在这个class对象中存了许多引用，都是指向运行时数据区的方法、字段、注解等数据）
+  
+* 连接
+   连接再细分为三个阶段：
+    1. 验证(文件格式验证，元数据验证，字节码验证，符号引用验证)
+    2. 准备(虚拟机给静态变量赋初值，基本数据类型赋0，引用类型赋null，布尔赋false)
+    3. 解析(将常量池的部分符号引用转换为直接引用，被重写的方法需要在运行时才能明确直接引用)
+* 初始化
+     执行程序员给予的初值，例如private static int a=3； 将3赋值给a。
+     再执行静态代码块，对类进行初始化。
+       多个静态代码块执行顺序，按照编写的顺序从上至下进行执行。
+     如果静态变量定义在静态代码块前，块中对静态变量可以赋值，但是不能读取，读区
+     会出错。
+     `private static int a=3`语句和静态代码块都被虚拟机收集起来生成<cinit>方法。
+##      数组的加载
+## 类加载器
+
+每一个类加载器都指定唯一的路径去加载类，且只能在该路径下加载。
+
+一个类加载器维护一个**命名空间**！
 
 
-字节码常量池：（该常量池在类加载的时候，被加载放入运行时常量池）
 
-- 字面量，final修饰的常量，以及字符串字面量
+**如何确定class唯一性**：通过类加载器（命名空间）+全限定名！
 
-- 符号引用
-  类的全限定名（有没有直接父类和接口的全限定名？）
-  字段的名字以及描述符
-  方法的名字以及描述符
+```java
+Class<?> class1=new MyClassLoader().loadClass("com.jornah.A");
+Class<?> class2=new MyClassLoader().loadClass("com.jornah.A");
+System.out.println(class1==class2);
+/*
+result:	false
+*/
+```
 
-  ​     
+
+
+### JVM中的类加载器：
+
+启动类加载器 `Bootstrap`（加载JVM的lib路径）：该加载器由C++实现
+
+扩展类加载器 `ExtClassLoader`（加载JVM的lib/ext路径）
+
+应用类加载器 `AppClassLoader`（加载classPath路径）
+
+**'继承体系结构'：**
+
+Bootstrap
+
+|--ExtClassLoader
+
+​	|--AppClassLoader
+
+​		|--自定义类加载器
+
+### 自定义类加载器：
+
+**破坏双亲委派方式：**重写loadClass方法，双亲委派机制的逻辑存在于该方法中，重写即可使其失效。
+
+```java
+public class DIYClassLoader extends ClassLoader{
+    private String classPath;
+    @Override
+    public Class<?> loadClass(String className){
+        // implements
+        // to load class in its classPath
+        // get class byteStream
+        // call defineClass()
+    }
+
+}
+```
+
+
+
+**不破坏双亲委派方式：**重写findClass，双亲委派机制中（loadClass方法逻辑中）如果父加载器都找不到class，则调用findClass加载。
+
+```java
+public class DIYClassLoader extends ClassLoader{
+    private String classPath;
+    @Override
+    public Class<?> findClass(String className){
+        // implements
+        // to load class in its classPath
+        // get class byteStream
+        // call defineClass()
+    }
+
+}
+```
+
+
+
+### 双亲委派机制
+
+双亲委派机制，此处的父亲并非使用的`OOP`中的继承，而是使用的'组合'。
+
+组合：子加载器存放父类引用。
+
+双亲委派机制逻辑代码存放于ClassLoader.loadClass()方法中:
+
+```java
+// 省略部分代码
+protected Class<?> loadClass(String name, boolean resolve)
+    throws ClassNotFoundException
+{
+    synchronized (getClassLoadingLock(name)) {
+        // First, check if the class has already been loaded
+        Class<?> c = findLoadedClass(name);
+        if (c == null) {
+            try {
+                if (parent != null) {
+                    c = parent.loadClass(name, false);
+                } else {
+                    c = findBootstrapClassOrNull(name);
+                }
+            } catch (ClassNotFoundException e) {
+                // ClassNotFoundException thrown if class not found
+                // from the non-null parent class loader
+            }
+
+            if (c == null) {
+                c = findClass(name);
+            }
+        }
+        if (resolve) {
+            resolveClass(c);
+        }
+        return c;
+    }
+}
+```
+
+
+**类加载器遇到加载要求时：**
+
+1. 先从自己的明明空间里找这个类，if (get) return class; 
+2. 若有爹，则将请求委托给父类去加载
+3. 判断flag:`resolve`，若真，则链接此class（默认不链接false）。
+
+
+
+
+
+### 打破双亲委派机制（非贬义）
+
+- `jdk1.2`之前未出现双亲委派机制
+- 上下文类加载器（JNDI，JDBC，JDBC接口使用extCLder或BtStrap加载，JDBC实现则有各大数据库厂商实现，使用appClassLoader加载，父加载器无法访问子加载器空间，所以上下文类加载器应运而生）
+- OSGI（网状的类加载器架构）：热部署
+
+#### 不同命名空间，类的可见性
+
+父加载器命名空间中的类对子加载器可见。
+
+子加载器命令空间中的类对父加载器不可见。
+
+无子父关系的类加载器命名空间中的类相互不可见。
+
+**特殊：**上下文加载器，此情况下，父加载器**可见**上下文类加载器的命名空间
+
+```
+Thread.getCurrentThread().getContextClassLoader();
+```
+
+
+
+[巨大的疑问](#question 1)：（已解决）
+
+这个疑问困扰了我两周，到处都没有文献将这个问题。
+
+
+
+# 反射
+
+利用class对象。
+
+获取class对象的方法：
+
+forName 与loadClass区别：
+
+- forName：默认连接并且初始化class
+- loadClass：默认不连接
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Questions
+
+## question 1
+
+之前看书的时候有一个巨大的**疑问**:不同的两个类加载器加载了同一个class文件，那我在程序代码中 new 这个类的时候，虚拟机new的是哪个类加载的class呢？
+
+解答：
+
+取决于 `当前代码块所属类` 所处于的命名空间！
+
+按照双亲委派从当前空间向上查找，找到就不再继续往上查照。
+
+
+
+## question 2
+
+## question 3
+
+## question 4
+
+## question 5
+
+## question 6
+
+## question 7
+
+## question 8
+
+## question 9
+
+## question 10
