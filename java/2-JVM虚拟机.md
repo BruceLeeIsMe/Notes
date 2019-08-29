@@ -277,14 +277,25 @@ class文件本质上就是一张表，表中包含无符号数和其他表，其
   描述符：分为字段描述符与方法描述符。字段——数据类型，方法——参数表与返回值。
 字段描述符：
   double val=0d 描述符: D；数组  double[] arr 描述符:  [D; 二维数组 描述符: [[D ;对象 String[] strArr 描述符: [Ljava/lang/String ，因为对象很多所以得加上全限定名
-方法描述符：
+方法描述符：String[] getAllProductName(int catrgoryIndex):
+(i)[Ljavax.lang.String
     
 * 字段表集合（访问标志，描述符（数据类型），属性表），字段表中不会存放从父类继承来的字段。堆中的实例对象数据中则会保存从父类中继承来的对象。
 
-* 方法表集合
+* 方法表集合(访问标志，描述符（参数表，返回值），属性表（Code属性，方法代码存放在这里）） 方法表中也不会存放从父类继承而来的方法，只有重写了父类方法才会被保存。
+  除了编写的方法外，还会存放有编译器生成的方法（构造器），<init>和<cinit>方法
+  init方法是收集 字段初始值与构造代码块生成的方法。
+  cinit方法是收集 静态字段初始值与静态代码块生成的方法。
+
 
 * 属性表集合（部分属性是字段和方法的附加属性，比如：Code和ConstantValve）
-  
+  Code：方法表：方法字节码指令
+  ConstantValve ：字段表：final关键字定义的常量
+  Exceptions：方法表：方法抛出的异常
+  InnerClasses：类文件：内部类列表
+  LineNumberTable：Code属性：java源码与字节码行号对应关系
+  LocalVariableTable：Code属性：java源码变量与局部变量表（locals）的对应关系。
+  以及一些注解相关的属性与其他属性，此处不一一举例。
 
 ![javap](.\img\javap.png)
 
@@ -304,8 +315,23 @@ args_size，方法参数大小
 
 
 
-命令解释：
+字节码指令解释：
+加载存储指令
+运算指令
+类型转换指令
+对象创建与访问指令
+操作数栈管理指令
+控制转移指令
+方法调用与返回指令：
+invokevirtual：调用对象的实例方法，根据对象类型进行分派
+invokeinterface：在运行时找到实现了该接口方法的对象，并调用该对象的方法。
+invokespecal：调用实例初始化方法，私有方法和父类方法。
+invokestatic：调用静态方法。
+invokedynamic：用户指定分派逻辑进行对象方法的调用。
+疑问：？ 那子类特有的共有方法呢？ 使用哪一个字节码指令： 自己测试后：结论：使用invokevirtual调用方法。
 
+异常处理指令
+同步指令
 iconst_1: intContstant 1:定义int类型的常量1放入操作数栈中。
 
 istore_1:将栈顶的int类型的数据存入 到 索引为1的局部变量表中。
