@@ -46,7 +46,7 @@ git config [--global] user.email "[email address]"
 
 
 
-使.gitignore文件生效
+使.gitignore文件生效（文件没有被跟踪的情况下才有效）
 
 $ git config core.excludeFile .gitignore
 
@@ -99,12 +99,57 @@ $ git commit -v
 **重做上一次commit，并包括指定文件的新变化**
 **$ git commit --amend [file1] [file2] ...**
 
+# 分支操作：
+
+创建分支：git branch branchName
+
+切换分支：git checkout branchName
+
+删除分支：git branch -d branchName
+
+**远程相关：**
+
+新建远程分支：git push origin branchName(将本地分支推送到远程)
+
+切换到远程分支：git checkout -b branchName origin/branchName
+
+删除远程分支：git push origin --delete branchName
 
 
 
+# 分支合并
+
+情境：在branch1上使用merge命令：
+
+merge branch2：将分支2的内容合并到分支1
 
 
 
 # 后悔药相关
 
-# 分支操作
+清除暂存区内容到工作区：git reset HEAD
+
+清除工作区与暂存区内容：git reset HEAD --hard
+
+
+
+reset参数： --hard： 清楚暂存区与工作区内容
+
+
+
+**版本回退：**
+
+根据版本号回退：git reset versionNo
+
+回退到上一个版本：git reset HEAD^
+
+重置当前版本：git reset HEAD
+
+
+
+
+
+
+
+
+
