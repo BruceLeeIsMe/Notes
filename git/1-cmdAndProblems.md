@@ -257,6 +257,49 @@ Updating 811c7f8..7e73467
 
 
 
+# 文件改动过大（换行符问题）
+
+现象：代码中只改动了几行，但是git检测的结果是整个文件都改动了
+
+原因：仓库中的代码与工作区代码的回车换行不一致所导致
+
+windows 换行：\r\n
+
+linux  换行: \n
+
+mac 换行: \n
+
+'\r'是回车，前者使光标到行首，（carriage return，CR）
+'\n'是换行，后者使光标下移一格，（line feed，LF）
+
+**解决命令：**
+
+自动转换换行符：
+
+- 提交时转换为LF，检出时转换为CRLF
+  git config --global core.autocrlf true
+
+- 提交时转换为LF，检出时不转换
+  git config --global core.autocrlf input
+
+- 提交检出均不转换
+  git config --global core.autocrlf false
+
+换行符检测：
+
+- 提交包含混合换行符的文件时给出警告
+  git config --global core.safecrlf warn
+
+- 拒绝提交包含混合换行符的文件
+  git config --global core.safecrlf true
+
+- 允许提交包含混合换行符的文件
+  git config --global core.safecrlf false
+
+
+
+
+
 
 
 
