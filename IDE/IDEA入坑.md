@@ -31,10 +31,18 @@ idea一个窗口中只有一个project，但可以有多个module。
 
 ## 其他便利性配置
 - 代码提示忽略大小写： setting -> code completion -> case sensitive completion
+
 - 打开文件允许多行显示  settring -> editor -> genaeral ->editor tabs -> 取消勾选 show tabs in single row
+
 - 单行注释`//` 空两行： settring -> editor  -> code style -> java -> code generation ->coment code 
+
 - 打开idea时不自动启动上次的项目 setting - > apperance -> system setting -> startup/shut down
-- s
+
+- 行号,方法分割线显示： setting -> editor -> general -> apperance -> (show line number,show method separators)
+
+  
+
+  
 
 
 
@@ -81,6 +89,8 @@ idea一个窗口中只有一个project，但可以有多个module。
 
 - 显示最近打开的文件: `ctrl+e`
 
+- surrounding code 生成： `shift+alt+z` 
+
  
 
 
@@ -113,7 +123,7 @@ idea只有在Source Root或 Test Source Root 目录下，才是会被编译的
 被标记为 Source Root的package 会变成蓝色
 被标记为 Test Source Root的package 会变成绿色
 
-如何标记？
+**如何标记？**
 右键目录：
     Mart directory as -> Source Root
     Mart directory as -> Test Source Root
@@ -130,8 +140,50 @@ idea只有在Source Root或 Test Source Root 目录下，才是会被编译的
 
    
 
-# working  代码重构
+# working  代码重构、生成
+
+​	
+
+**常用重构**
+
+ `Refactor` 重构 
+`Signarture` 签名 
+`Extract` 提取 
+`Field` 属性 
+`Constant` 常量 
+`Method` 方法 
+`Parameter` 参数 
+`Surround` 环绕 
 
 
 
+## mark一下 ，以后来修改成自己的
 
+
+
+**idea原生快捷键：**
+
+- 重命名文件、方法、属性等（Rename）：Shift+F6，同时被修改处在其他被调用的地方也会随之更改，修改文件名，如类名，右键当前类文件 -> Refactor -> Rename，便会看到快捷键提示 Shift+F6
+
+- 重构类、方法（Change Signarture）：Ctrl+F6
+
+- 提取当前选择为变量（Extract Variable）：Ctrl+Alt+V
+
+- 提取当前选择为类的私有属性（Extract Field）：Ctrl+Alt+F
+
+- 提取当前选择为常量（Extract Constant）：Ctrl+Alt+C
+
+- 提取当前选择为方法（Extract Method）：Ctrl+Alt+M
+
+- 提取当前选择为方法参数（Extract Parameter）：Ctrl+Alt+P
+
+- 提取代码块至 if、try 等结构中（Surround With）：Ctrl+Alt+T
+
+- 创建模块文件等（New）：Ctrl+Alt+N
+
+- 创建测试用例（Test）：Ctrl+Shift+T
+
+- 重构菜单（Refactor for this）：Ctrl+T
+
+- 英雄总是最后登场！重构一切的男人！！！：Ctrl+Shift+Alt+T
+  
