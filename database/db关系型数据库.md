@@ -43,3 +43,17 @@ boolean flag= exist(select 1 from B  A.name=B.name);
 
 ## 分库分表
 
+
+
+# 问题
+
+## 数据库资源未关闭
+
+- Connection未关闭会导致长时间占用连接，从而致使其他线程因无法获取连接而报错
+- ResultSet未关闭，会导致数据库游标资源长时间占用，有资源消耗殆尽致使数据库挂掉的风险
+- statement/prepareStatement 未关闭，后果如 resultSet
+
+
+
+
+
