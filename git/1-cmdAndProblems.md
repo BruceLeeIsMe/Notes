@@ -6,6 +6,78 @@
 
 
 
+# Git使用的基本流程
+
+1. 初次使用git时，需要进行相关配置
+
+2. 通过url克隆项目
+
+3. 创建/切换到需要工作的分支（规范要求：做一件事创一个分支）
+
+   ​	创建 git branch branchName
+
+   ​	切换到远程分支:git chekout  -b branchName origin/branchName
+
+4. 使用git diff 对比文件改动
+
+5. 使用 git add 将文件添加到暂存区
+
+6. 使用git status查看各区状态：工作区，暂存区
+
+7. 使用git commit -m "msg" 提交请求
+
+8. 使用 git push 将代码同步到远程仓库
+
+   ​	此步可能会因冲突而被reject，git会提示先pull，按照提示操作即刻。
+
+   ​	pull可能会产生冲突，按照下文冲突处理的指示完成即可
+
+9. 流程结束
+
+
+
+
+
+
+
+# 初次使用
+
+## 配置
+
+ 设置提交代码时的用户信息
+
+$ git config [--global] user.name "[name]"
+
+$ git config [--global] user.email "[email address]"
+
+
+
+显示当前的Git配置*
+
+$ git config --list
+
+
+
+编辑Git配置文件
+
+$ git config -e [--global]
+
+
+
+使.gitignore文件生效（文件没有被跟踪的情况下才有效）
+
+$ git config core.excludeFile .gitignore
+
+
+
+
+
+
+
+
+
+
+
 ## 新建代码库
 
 
@@ -22,35 +94,9 @@ $ git init [project-name]
 
 $ git clone [url]
 
-## 配置
 
 
-
-显示当前的Git配置*
-
-$ git config --list
-
-
-
-编辑Git配置文件
-
-$ git config -e [--global]
-
-
-
- 设置提交代码时的用户信息
-
-$ git config [--global] user.name "[name]"
-
-git config [--global] user.email "[email address]"
-
-
-
-使.gitignore文件生效（文件没有被跟踪的情况下才有效）
-
-$ git config core.excludeFile .gitignore
-
-
+状态检查
 
 # 增加/删除文件（取消跟踪）
 
@@ -101,27 +147,78 @@ $ git commit -v
 
 # 分支操作：
 
+**本地操作：**
+
 创建分支：git branch branchName
 
 切换分支：git checkout branchName
 
 删除分支：git branch -d branchName
 
+
+
 **远程相关：**
 
 新建远程分支：git push origin branchName(将本地分支推送到远程)
-
-切换到远程分支：git checkout -b branchName origin/branchName
 
 删除远程分支：git push origin --delete branchName
 
 
 
-# 分支合并
+**切换到远程分支：**
+
+git fetch： 将远程的版本库（包括分支）带回到本地，但不做任何merge操作
+
+git checkout -b branchName origin/branchName
+
+git checkout --track origin/branchName：在本地创建分支且与远程分支同名 
+
+
+
+## 本地分支与远程分支绑定
+
+通过 git checkout -b branchName origin/branchName命令创建的本地分支，默认与远程绑定
+
+ **在远程创建一个与本地`branch_name`同名的分支并跟踪** ：git push --set-upstream origin branch_name
+
+
+
+
+
+## 分支合并
 
 情境：在branch1上使用merge命令：
 
 merge branch2：将分支2的内容合并到分支1
+
+
+
+Merge或pull时候出现，unclean work tree Or untracked files will be overwrite,此时需要移除不需要的untracked的文件
+命令：git  clean -df
+
+d=default 
+
+f=force
+
+
+
+# stash
+
+工作时紧急bug需要fix
+
+如何使用stash？
+
+1. 将所有code stash保存起来
+
+2. 创建新分支进行bug fix，commit push
+
+3. fix完成后切回原分支
+
+4. pop， pop可能会出现pop失败
+
+   如果pop失败，造成原因是代码库与stash的code冲突，处理好（以merge冲突处理）冲突后，代码就跑到工作区了，不过此时需要手动drop掉此次记录
+
+
 
 
 
@@ -141,9 +238,20 @@ reset参数： --hard： 清楚暂存区与工作区内容
 
 根据版本号回退：git reset versionNo
 
+​	git log或者git relog查看版本历史
+
 回退到上一个版本：git reset HEAD^
 
 重置当前版本：git reset HEAD
+
+
+
+**使用一次新的commit，替代上一次提交**
+**如果代码没有任何新变化，则用来改写上一次commit的提交信息**
+**$ git commit --amend -m [message]**
+
+**重做上一次commit，并包括指定文件的新变化**
+**$ git commit --amend [file1] [file2] ...**
 
 
 
@@ -163,7 +271,7 @@ reset参数： --hard： 清楚暂存区与工作区内容
 
 2. 在我们处理了内容的冲突之后，告诉git，我们冲突处理好啦，如何告诉呢？
 
-   将修改的文件提交到本地仓库，git就知道我们处理好了，然后再进行合并，并让我们填写merge消息。
+   将修改的文件commit到本地仓库，git就知道我们处理好了，然后再进行合并，并让我们填写merge消息。
 
 3. 冲突处理完成
 
@@ -171,7 +279,7 @@ reset参数： --hard： 清楚暂存区与工作区内容
 
 # --------问题-----------
 
-# pull相关问题：
+## pull相关问题：
 
 **本质上还是merge的问题**
 
@@ -179,7 +287,7 @@ reset参数： --hard： 清楚暂存区与工作区内容
 2. xxx
 3. xxx
 
-# reset相关问题
+## reset相关问题
 
 1. git reset HEAD^：将本地仓库回退到上一个版本
 
@@ -201,7 +309,7 @@ reset参数： --hard： 清楚暂存区与工作区内容
 
 解答：清楚所有工作区与暂存区内容
 
-# merge request
+## merge request
 
 多人协作的时，master分支为最稳定分支，我们没有直接向master分支提交代码的权限。于是需要向master发起merge request，由项目老大批准后方可merge。
 
@@ -219,9 +327,9 @@ reset参数： --hard： 清楚暂存区与工作区内容
 
 4. merge request  流程完成
 
-# ignore与取消跟踪
+## ignore与取消跟踪
 
-## 取消跟踪文件
+### 取消跟踪文件
 
 **git rm  filename -r --cached**
 
@@ -257,7 +365,7 @@ Updating 811c7f8..7e73467
 
 
 
-# 文件改动过大（换行符问题）
+## 文件改动过大（换行符问题）
 
 现象：代码中只改动了几行，但是git检测的结果是整个文件都改动了
 
@@ -289,16 +397,28 @@ mac 换行: \n
 
 - 提交包含混合换行符的文件时给出警告
   git config --global core.safecrlf warn
-
 - 拒绝提交包含混合换行符的文件
   git config --global core.safecrlf true
-
 - 允许提交包含混合换行符的文件
   git config --global core.safecrlf false
 
 
 
+## SSL验证
 
+git clone 时提示 ssl auth...造成的克隆失败。
+
+跳过SSL验证：
+
+$ git config --global http.sslVerify false
+
+
+
+## 文件名过长
+
+允许长文件名
+
+git config --system core.longpaths true
 
 
 
