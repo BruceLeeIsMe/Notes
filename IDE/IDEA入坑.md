@@ -69,7 +69,48 @@ idea一个窗口中只有一个project，但可以有多个module。
 
 ## 代码重构
 
+1. 将一段代码提取为一个方法
+2. 全局修改变量名/类名/接口名/方法名
 
+
+
+# 代码生成：快捷键 tab
+
+## 动态模板（live template）
+
+可根据当前所属方法/类来生成对应的代码
+
+**举例：debug 控制台打印**
+
+![img](./img/live-template.png)
+
+点击Edit Variables 即可修改VAR变量映射的值，此处选择的是 context建议的变量
+
+**使用方法：输入vout 再敲击tab键**
+
+
+
+## 快速生成main
+
+输入main 敲tab
+
+自动生成public static void main(String[] args){}
+
+
+
+
+
+## 遍历集合或数组
+
+输入 数组/集合.for   ：提示快捷生成遍历
+
+
+
+
+
+
+
+### 举例以后看到了来补充
 
 # 快捷键介绍与个人定制
 
@@ -78,6 +119,8 @@ idea一个窗口中只有一个project，但可以有多个module。
 ​	setting -> keymap -> eclipse 
 
 然后再进行顺手模改版：
+
+
 
 
 
@@ -91,9 +134,9 @@ idea一个窗口中只有一个project，但可以有多个module。
 
 - surrounding code 生成： `shift+alt+z` 
 
- 
+- 智能全体 import并删除无用import: `ctrl+alt+o`
 
-
+- 格式化代码 : `ctrl+alt+l`
 
 
 
@@ -111,11 +154,44 @@ idea一个窗口中只有一个project，但可以有多个module。
 
 
 
+## 快捷键、全局设置可导出
+
+file-> exporing setting
+
+
+
+# 无需保存
+
+IntelliJ IDEA 是一个没有 Ctrl + S 的 IDE，所以每次修改完代码你只要管着运行或者调试即可，无需担心保存或者丢失代码。
+
+# 必备插件及使用：
+
+alibaba java coding  guideline：阿里编码规约提示
+
+key-promoterX：熟悉快捷键，鼠标操作提示：快捷键
+
+findBugs：扫描 proj/module/file中的bug
+
+db navigator：数据库GUI
+
+maven helper：找到maven依赖冲突，查看maven树桩依赖结构
+
+translation：翻译插件，可设置google baidu youdao 翻译引擎
+
+
+
 
 
 
 
 # 问题
+
+## 每次新建proj都需要配置maven
+
+解决：file -》 other setting ，即可配置 default setting
+
+
+
 ## 无 新建类或packg 选项卡
 idea只有在Source Root或 Test Source Root 目录下，才是会被编译的
 因为也只有在这两个目录下，右键new 才会出现 new java class 和 new package
@@ -187,3 +263,13 @@ idea只有在Source Root或 Test Source Root 目录下，才是会被编译的
 
 - 英雄总是最后登场！重构一切的男人！！！：Ctrl+Shift+Alt+T
   
+  
+  
+  快捷键自动跳转到错误， keymap搜error
+  
+  滚动条左右，上下移动 搜scroll 
+  
+
+
+
+# 如果实在找不到问题，就invalid cache and Restart
