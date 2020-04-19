@@ -16,13 +16,18 @@ order by：排序 asc ，desc
 as： 给列或者表/零时表起别名，部分情况起别名也可不用as，直接跟在后面即可。
 
 # 执行顺序
-from
-join on
-where 
-group by
-having
-order by
-select
+- FROM
+- WHERE
+- GROUP BY
+- HAVING
+- SELECT
+- DISTINCT
+- UNION
+- ORDER BY
+
+
+
+
 
 
 
